@@ -1,0 +1,107 @@
+#include <iostream>
+#include <ctime>
+#include <chrono>
+
+using namespace std;
+
+
+void TimePointAndDuration()
+{
+	//ctime은 시점과 시간 간격을 구분하지 않고 처리한다.
+
+	std::time_t t1 = std::time(nullptr); // 현 시점
+	std::time_t t2 = t1 + 10;			 //10초 후
+
+	double interval = std::difftime(t2, t1); //시간 간격 계산 (여기선 t1, t2가 시간 간격으로 해석된다)
+	cout << "10초 간격" << interval << "초" << endl;
+
+	//chrono에선 시간 간격과 시점의 개념을 분리해 따로 처리한다.
+
+	//chrono의 시간 간격
+	std::chrono::seconds sec(10);
+	std::chrono::milliseconds ms(1000);
+	std::chrono::hours hs(1);
+	// 이 타입들은 std::chrono::duration 의 구체적인 특화
+
+	// 값의 단위를 통합시키지 않아도 알아서 맞춰준다.
+	auto total_ms = std::chrono::duration_cast<std::chrono::milliseconds>(sec + ms + hs);
+
+	cout << "총 합 : " << total_ms.count() << "밀리초" << endl;
+	
+	//chrono의 시점
+	std::chrono::system_clock::time_point now = std::chrono::system_clock::now();
+	std::chrono::system_clock::time_point one_hour_later = now + std::chrono::hours(1);
+
+	std::chrono::system_clock::duration duration = one_hour_later - now; //시점끼리의 연산은 시간 간격으로 변환된다.
+
+	cout << "1시간 차이 : " << std::chrono::duration_cast<std::chrono::seconds>(duration).count() << " 초 " << endl;
+}
+
+void Precision()
+{
+	//ctime은 초 단위로만 표현 가능하다.
+	std::time_t tSec = std::time(nullptr);
+	std::time_t tMilliSec = tSec * 1000;
+	std::time_t tMicroSec = tSec * 1000000;
+	
+	// chrono는 다양한 단위로 나타내기 가능
+	std::chrono::system_clock::time_point cSec = std::chrono::system_clock::now();
+	std::chrono::system_clock::time_point cMilliSec = std::chrono::time_point_cast<std::chrono::milliseconds>(cSec);
+	std::chrono::system_clock::time_point cMicroSec = std::chrono::time_point_cast<std::chrono::microseconds>(cSec);
+}
+
+void Clocks()
+{
+	//ctime의 시계
+	std::time_t cNow = std::time(nullptr); // 시스템 시계만 사용이 가능하다.
+
+	// chrono의 시계들
+	std::chrono::system_clock::time_point sysNow = std::chrono::system_clock::now(); // 현재 시스템 시간을 받아옴
+	std::chrono::system_clock::duration sysDuration = sysNow.time_since_epoch();     // Epoch 이후 초 단위 시간
+
+	std::chrono::steady_clock::time_point stNow = std::chrono::steady_clock::now();  // 시간의 흐름이 일정한 시계
+	std::chrono::steady_clock::duration stDuration = stNow.time_since_epoch();       // 성능 측정, 시간 간격 측정에 사용된다.
+
+	std::chrono::high_resolution_clock::time_point hrcNow = std::chrono::high_resolution_clock::now(); //가장 높은 정밀도를 제공
+	std::chrono::high_resolution_clock::duration hrcDuration = hrcNow.time_since_epoch();              //내부적인 구현은 steady_clock 또는 system_clock 중 하나에 매핑
+}
+
+void Operators()
+{
+	std::time_t cTime = std::time(nullptr);
+	cout << "cTime :" << cTime << endl;
+	cout << "cTime + 10 : " << cTime + 10 << endl;
+	cout << "cTime - 10 : " << cTime - 10 << endl;
+	cout << "cTime * 10 : " << cTime * 10 << endl;
+	cout << "cTime / 10 : " << cTime / 10 << endl;
+	cout << "cTime % 10 : " << cTime % 10 << endl;
+	cout << "++cTime : " << ++cTime << endl;
+	cout << "--cTime : " << --cTime << endl;
+
+	std::chrono::system_clock::time_point now = std::chrono::system_clock::now();
+	std::chrono::system_clock::time_point one_hour_later = now + std::chrono::hours(1); // time_point와 duration의 연산 결과는 time_point
+
+	std::chrono::system_clock::duration duration = one_hour_later - now; // time_point 끼리의 연산은 duration
+	cout << "time_point 끼리의 연산 : " << duration.count() << endl;
+	cout << "time_point와 duration의 연산 : " << std::chrono::system_clock::to_time_t(one_hour_later) << endl;
+	
+	std::chrono::system_clock::duration d1(5);  //  5초
+	std::chrono::system_clock::duration d2(10); // 10초
+
+	auto sum = d1 + d2;
+	cout << "Sum: " << sum.count() << " seconds" << endl;
+
+	auto diff = d2 - d1;
+	cout << "Difference: " << diff.count() << " seconds" << endl;
+
+	auto mul = d1 * 2;  // 5초 * 2 = 10초
+	cout << "Multiplication: " << mul.count() << " seconds" << endl;
+
+	auto div = d2 / 2;  // 10초 / 2 = 5초
+	cout << "Division: " << div.count() << " seconds" << endl;
+}
+
+int main()
+{
+	Operators();
+}
