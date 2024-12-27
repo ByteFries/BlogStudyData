@@ -1,0 +1,158 @@
+#include <iostream>
+#include <fstream>
+
+using namespace std;
+
+void WriteTest()
+{
+	ofstream outFile("test.txt"); // 파일 열기
+
+	outFile << "Test" << endl;    //데이터 쓰기
+
+	outFile.close();			  //파일 닫기
+}
+
+void Cin()
+{
+	int input;
+	cout << "입력 : ";
+	cin >> input; // 기본적인 입력 (공백을 기준으로 가장 앞 토큰을 input에 저장)
+
+	cout << "입력 결과 : " << input << endl;
+
+	cout << "잘못된 입력 해보기 : ";
+	cin >> input;
+	
+	if (cin.fail()) // cin이 현재 실패 상태인지 확인
+	{
+		cout << "잘못된 입력" << endl;
+		
+		cin.clear(); // cin을 정상 상태로 복구
+		cin.ignore(numeric_limits<streamsize>::max(), '\n'); // 입력 버퍼에서 개행문자로 설정한 \n까지의 모든 문자를 건너뛰게 함
+		
+		cout << "정상 복구 완료" << endl;
+	}
+
+	cout << "다시 입력 : ";
+	cin >> input;
+
+	cout << "입력 결과 : " << input << endl;
+}
+
+#include <iomanip>
+
+void Cout()
+{
+    cout << "cout의 << 연산자가 cout(ostream) 객체와 << 오른쪽의 데이터를 연결한다." << std::endl;
+    cout << "각 데이터 타입에 맞는 형 변환을 통해 출력할 수 있게 된다." << std::endl;
+    cout << "출력은 화면에 바로 나타는 것이 아니라, 출력 버퍼에 먼저 저장된다." << std::endl;
+    cout << "버퍼에 저장된 데이터는 버퍼 플러시를 통해 출력된다." << std::endl;
+    cout << "버퍼는 flush 함수 호출이나, endl로 플러시 가능하다." << std::endl;
+    cout << "플러시 하지 않고 프로그램을 종료하면, cout은 소멸하기 전 출력 버퍼의 모든 데이터를 플러시하고 소멸한다." << endl;
+
+    cout << std::endl; // 공백 줄 추가
+
+    // flush와 endl 차이점 설명
+    cout << "flush와 endl의 주요 차이점:" << endl;
+    cout << setw(30) << left << "- flush는 줄바꿈 없이 버퍼만 플러시한다." << endl;
+    cout << setw(30) << left << "- endl은 줄바꿈을 포함하여 버퍼를 플러시한다." << endl;
+    cout << endl;
+
+    cout << "두 경우 모두 출력 버퍼가 비워지며 화면에 즉시 출력된다." << std::endl;
+
+    cout << endl;
+
+    // flush 예시
+    std::cout << "flush 함수 플러시 결과";
+    std::cout.flush();  // 버퍼 플러시
+    std::cout << "(flush 이후)" << endl << endl;
+
+    // endl 예시
+    cout << "endl 함수 플러시 결과" << endl;
+    cout << "(endl 이후)" << endl << endl;
+
+    // iomanip 헤더를 사용한 출력 포맷 조정
+    cout << "iomanip 헤더를 사용하면 출력 포맷 조정이 가능하다" << endl;
+
+    cout << "- std::oct와 std::hex를 이용한 포맷 조정" << endl;
+    int num = 255;
+    cout << " - 10진법 : " << num << endl;
+    cout << " -  8진법 : " << std::oct << num << endl;
+    cout << " - 16진법 : " << std::hex << num << endl;
+
+    cout << "- setw와 right를 이용하면 출력 너비와 정렬 순서를 변경 가능하다." << endl;
+    cout << setw(00) << std::right << " cout << setw(00) << std::right" << endl;
+    cout << setw(40) << std::right << " cout << setw(40) << std::right" << endl;
+    cout << setw(50) << std::right << " cout << setw(50) << std::right" << endl;
+}
+
+void Clog()
+{
+    clog << "clog는 로그 메시지를 출력할 때 사용한다." << endl;
+    clog << "cout과 유사하게 버퍼링하는 출력 스트림이다." << endl;
+    clog << "대신 자동으로 플러시되지 않는다." << endl;
+
+    setvbuf(stdout, nullptr, _IOFBF, 1024);
+    setvbuf(stderr, nullptr, _IOFBF, 1024);
+
+    clog << "1. clog 명시적 플러시 X\n";
+    cout << "2. cout 플러시" << endl;
+    clog << "3. clog 명시적 플러시 X\n";
+}
+
+void Cerr()
+{
+    cerr << "cerr는 출력 버퍼를 거치지 않고 바로 출력된다." << endl;
+    cerr << "즉시 화면에 표시되기에 오류 메시지가 출력되는 시점에 사용자가 바로 인지할 수 있게 된다." << endl;
+}
+
+#include <cstdio>
+
+void Sync_with_stdio()
+{
+    setvbuf(stdout, nullptr, _IOFBF, 1024);
+
+    if (std::ios_base::sync_with_stdio(false)) // 동기화 해제
+    {
+        cout << "동기화 해제" << endl;
+    }
+
+    for (int i = 0; i < 50; i++)
+    {
+        cout << "a from cout\n";   //순서가 섞일 수 있다.     
+        printf("b from printf\n"); 
+        cout << "c from cout\n";   
+    }
+}
+
+void Tie()
+{
+    setvbuf(stdout, nullptr, _IOFBF, 1024);
+
+    std::cin.tie(nullptr);  // cin과 cout의 자동 연결 해제
+    std::cout << "cin 전에 cout 호출했음\n";  // 이 출력은 플러시되지 않음
+    int x;
+    std::cin >> x;  // 입력을 받기 전에 cout이 플러시되지 않음
+    std::cout << "연결이 해제되어 cout 버퍼에 데이터가 남아도 플러시 되지 않음: " << x << std::endl;  // 이 출력은 플러시됨
+}
+
+void Redirection()
+{
+    FILE* f = nullptr; // 열려있는 파일 스트림을 저장할 포인터
+
+    if (freopen_s(&f, "redirection.txt", "w", stdout)) //세번째 매개변수는 파일 열기 모드(Write), 네번째는 리다이렉션하는 스트림
+    {
+        cout << "실패하면 0 이외의 값" << endl;
+    }
+    else
+    {
+        std::cout << "리다이렉션해 파일에 저장" << std::endl; // 프로그램 종료 시 "redirection.txt" 가 닫힌다.
+    }
+
+    fclose(f);
+}
+
+int main()
+{
+  return 0;
+}
