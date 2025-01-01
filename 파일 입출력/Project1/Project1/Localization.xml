@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<messages>
+	<!-- 프로그램 관련 메시지 -->
+	<program>
+		<start>이진 파일 입출력기</start>
+		<menu>
+			<option_1>파일 읽기</option_1>
+			<option_2>파일 쓰기</option_2>
+			<option_3>종료</option_3>
+		</menu>
+		<exit>프로그램을 종료</exit>
+	</program>
+
+	<!-- 오류 메시지 -->
+	<errors>
+		<invalid_input>잘못된 입력</invalid_input>
+		<invalid_filename>잘못된 파일 명</invalid_filename>
+		<invalid_input_format>잘못된 입력 확인</invalid_input_format>
+	</errors>
+
+	<!-- 파일 읽기 관련 메시지 -->
+	<file_reader>
+		<mode_prompt>읽기 모드</mode_prompt>
+		<mode_text>텍스트 모드</mode_text>
+		<mode_binary>이진 모드</mode_binary>
+	</file_reader>
+
+	<!-- 파일 쓰기 관련 메시지 -->
+	<file_writer>
+		<write_mode_prompt>쓰기모드 선택</write_mode_prompt>
+		<write_mode_overwrite>덮어쓰기</write_mode_overwrite>
+		<write_mode_append>추가하기</write_mode_append>
+		<file_type_prompt>파일 설정</file_type_prompt>
+		<file_type_text>텍스트 파일</file_type_text>
+		<file_type_binary>이진 파일</file_type_binary>
+		<file_selection_prompt>파일 선택</file_selection_prompt>
+		<file_selection_existing>기존 파일 선택</file_selection_existing>
+		<file_selection_new>새 파일 선택</file_selection_new>
+		<new_filename_prompt>새 파일 명</new_filename_prompt>
+		<enter_line_prompt>Enter line (Ctrl+Z to end):</enter_line_prompt>
+		<eoc_input_confirm>EOC 입력 확인</eoc_input_confirm>
+	</file_writer>
+
+	<!-- 파일 관리 관련 메시지 -->
+	<file_manager>
+		<read_method_prompt>읽어오기 방법</read_method_prompt>
+		<method_filesystem>filesystem</method_filesystem>
+		<method_findfirst>_findfirst</method_findfirst>
+		<method_winapi>winapi</method_winapi>
+		<no_files>선택 가능한 파일이 없습니다.</no_files>
+		<file_select_prompt>가져올 파일</file_select_prompt>
+	</file_manager>
+</messages>
