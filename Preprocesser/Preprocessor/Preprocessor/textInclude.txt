@@ -1,0 +1,5 @@
+class TextClass
+{
+public:
+	int memberVal = 0;
+}
