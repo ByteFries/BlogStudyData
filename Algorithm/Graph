@@ -1,0 +1,102 @@
+#include <iostream>
+#include <vector>
+#include <queue>
+#include <stack>
+using namespace std;
+
+vector<bool> visited;
+vector<vector<int>> graph;
+
+void BFS(int start)
+{
+	queue<int> q;
+	q.push(start);
+	visited[start] = true;
+
+	while (!q.empty())
+	{
+		int num = q.front(); q.pop();
+		
+		for (int next : graph[num])
+		{
+			if (visited[next]) continue;
+			visited[next] = true;
+			q.push(next);
+		}
+	}
+}
+
+void DFS(int node)
+{
+	visited[node] = true;
+
+	for (int next : graph[node])
+	{
+		if (visited[next]) continue;
+		DFS(node);
+	}
+}
+
+vector<int> distances;
+vector<vector<pair<int, int>>> graphs;
+
+void Djikstra(int start)
+{
+	priority_queue<pair<int, int>> pq;
+
+	pq.push({0, start});
+
+	while (!pq.empty())
+	{
+		int dist = pq.top().first;
+		int node = pq.top().second; pq.pop();
+
+		for (const auto& p :graphs[node])
+		{
+			int next = p.first; int weight = p.second;
+			int newWeight = distances[node] + weight;
+			if (distances[next] > newWeight)
+			{
+				pq.push({newWeight, next});
+			}
+		}
+	}
+}
+
+void Bellman(int start)
+{
+	distances[start] = 0;
+
+	for (int i = 0; i < graphs.size() - 1; i++)
+	{
+		for (int j = 0; j < graph.size(); j++)
+		{
+			for (const auto& p : graphs[j])
+			{
+				int weight = p.first;
+				int next = p.second;
+				int newWeight = weight + distances[j];
+
+				if (distances[next] > newWeight)
+				{
+					distances[next] = newWeight;
+				}
+			}
+		}
+	}
+
+	for (int i = 0; i < graph.size(); i++)
+	{
+		for (const auto& p : graphs[i])
+		{
+			int weight = p.first;
+			int next = p.second;
+			int newWeight = weight + distances[i];
+
+			if (distances[next] > newWeight)
+			{
+				return; // 음의 순환
+			}
+		}
+	}
+}
